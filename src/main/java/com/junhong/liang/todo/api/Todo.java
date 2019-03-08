@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 
 public class Todo {
 
@@ -50,6 +50,22 @@ public class Todo {
 
     public List<Task> getTasks() {
         return tasks;
+    }
+
+    public static boolean isValid(Todo td, boolean hasId) {
+        if ((hasId && td.getId() == null) ||
+                td.getDescription() == null ||
+                td.getTasks() == null) return false;
+
+        // Validate Task in tasks, assume tasks can't have same ID
+        Set<String> set = new HashSet<>();
+        for(Task t : td.getTasks()) {
+            if(set.contains(t.getId())) return false;
+            set.add(t.getId());
+        }
+
+        return true;
+
     }
 
 }

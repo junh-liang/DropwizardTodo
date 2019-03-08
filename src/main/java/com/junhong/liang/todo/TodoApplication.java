@@ -4,6 +4,7 @@ import com.codahale.metrics.health.HealthCheck;
 import com.junhong.liang.todo.api.TodoServiceInMemoryImpl;
 import com.junhong.liang.todo.api.TodoServiceMongoImpl;
 import com.junhong.liang.todo.core.MongoManaged;
+import com.junhong.liang.todo.core.TodoExceptionMapper;
 import com.junhong.liang.todo.health.DummyHealthCheck;
 import com.junhong.liang.todo.health.MongoHealthCheck;
 import com.junhong.liang.todo.resources.TodoResource;
@@ -45,14 +46,14 @@ public class TodoApplication extends Application<TodoConfiguration> {
 
             // Use mongodb as backend
             System.out.println("==== Using in MongoDB as backend storage ====");
+            System.out.format("Connecting to MongoDB at %s:%s", configuration.mongohost, configuration.mongoport).println();
 
             //Create Mongo instance
             MongoClient mongo = null;
             try {
                 mongo = new MongoClient(configuration.mongohost, configuration.mongoport);
             } catch (UnknownHostException e) {
-                System.err.format("Error while trying to connect to MongoDB in %s:%s, shutting down application...",
-                        configuration.mongohost, configuration.mongoport).println();
+                System.err.println("Host address error, shutting down application...");
                 System.exit(1);
             }
             //Add Managed for managing the Mongo instance
@@ -74,6 +75,8 @@ public class TodoApplication extends Application<TodoConfiguration> {
             System.exit(1);
 
         }
+
+        environment.jersey().register(new TodoExceptionMapper());
 
     }
 

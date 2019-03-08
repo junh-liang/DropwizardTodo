@@ -30,7 +30,7 @@ public class TodoResourceEndpointTest {
 
         if (storageType.equals("memory")) service = new TodoServiceInMemoryImpl();
         else {
-            DB db = new MongoClient("ucc-ipc-1", 27017).getDB("mongoTest");
+            DB db = new MongoClient("localhost", 27017).getDB("mongoTest");
             service = new TodoServiceMongoImpl(db);
         }
 
@@ -132,7 +132,7 @@ public class TodoResourceEndpointTest {
     public void testPut() {
 
         String todoId = addTodo(new Todo("Name 1", "Description 1", new ArrayList<>())).getId();
-        Todo newTodo = new Todo("Name 2", "Description 2", new ArrayList<>());
+        Todo newTodo = new Todo(todoId, "Name 2", "Description 2", new ArrayList<>());
 
         resources.target("/todos/" + todoId).request().put(Entity.json(newTodo));
 

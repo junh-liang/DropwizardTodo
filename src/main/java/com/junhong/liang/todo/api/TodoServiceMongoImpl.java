@@ -17,9 +17,18 @@ public class TodoServiceMongoImpl implements TodoService {
 
     @Override
     public Todo getTodoById(String id) {
-        MongoTodo mongoTodo = collection.findOneById(id);
-        if(mongoTodo != null) return mongoTodo.getTodo();
-        else return null;
+        MongoTodo mongoTodo;
+        try {
+            mongoTodo = collection.findOneById(id);
+        } catch (IllegalArgumentException e) {
+            // This is necessary because if the user put in a invalid ObjectID, mongo will throw IllegalArgumentException
+            throw new TodoException(TodoException.RESOURCE_NOT_FOUND, "Todo with ID " + id + " not found.");
+        }
+
+        if(mongoTodo == null) {
+            throw new TodoException(TodoException.RESOURCE_NOT_FOUND, "Todo with ID " + id + " not found.");
+        }
+        return mongoTodo.getTodo();
     }
 
     @Override
@@ -34,12 +43,18 @@ public class TodoServiceMongoImpl implements TodoService {
 
     @Override
     public Todo addTodo(Todo todo) {
+        if (!Todo.isValid(todo,false)) {
+            throw new TodoException(TodoException.TODO_MALFORMED, "Todo is malformed.");
+        }
         MongoTodo newTodo = new MongoTodo(todo);
         return collection.insert(newTodo).getSavedObject().getTodo();
     }
 
     @Override
     public Todo updateTodo(String id, Todo todo) {
+        if (!Todo.isValid(todo,true)) {
+            throw new TodoException(TodoException.TODO_MALFORMED, "Todo is malformed.");
+        }
         Todo newTodo = new Todo(id, todo.getName(), todo.getDescription(), todo.getTasks());
         collection.updateById(id, new MongoTodo(newTodo));
         return newTodo;

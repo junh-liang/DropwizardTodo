@@ -8,16 +8,27 @@ Start the application by running:
 mvn clean package -DskipTests
 ```
 
-If you want to automatically spin up a MongoDB while for testing, use the following command:
+If you want to automatically spin up a MongoDB for testing, use the following command:
 
 ```bash
 mvn clean package -DskipTests -DembeddedMongo
 ```
 
--------
+Run test with Maven:
+
+```bash
+mvn test
+```
+   
+   
+---
+
 
 ### Configuration
 
-By editting `./configuration.yml`, you can change the storage backend. By setting option `storage` to `memory`, 
+By editing `./configuration.yml`, you can change the storage backend. By setting option `storage` to `memory`, 
 an in-memory storage will be used; By setting `storage` to `mongodb`, a MongoDB instance will be used, with its endpoint
-being specified in `mongohost`, `mongoport` and `mongodb`.
+specified in the following fields:
+- `mongohost`
+- `mongoport`
+- `mongodb`
