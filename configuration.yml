@@ -1,0 +1,5 @@
+# storage could be "memory" or "mongodb"
+storage: "mongodb"
+mongohost: localhost
+mongoport: 27017
+mongodb: testDB
