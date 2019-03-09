@@ -65,7 +65,21 @@ public class Todo {
         }
 
         return true;
-
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Todo todo = (Todo) o;
+        return Objects.equals(id, todo.id) &&
+                Objects.equals(name, todo.name) &&
+                Objects.equals(description, todo.description) &&
+                Objects.equals(tasks, todo.tasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, tasks);
+    }
 }

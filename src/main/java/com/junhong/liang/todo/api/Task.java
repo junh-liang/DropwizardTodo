@@ -3,6 +3,7 @@ package com.junhong.liang.todo.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -38,4 +39,19 @@ public class Task {
         return description;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+                Objects.equals(name, task.name) &&
+                Objects.equals(description, task.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description);
+    }
 }

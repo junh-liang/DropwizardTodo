@@ -1,9 +1,6 @@
 package com.junhong.liang.todo.resources;
 
-import com.junhong.liang.todo.api.Todo;
-import com.junhong.liang.todo.api.TodoService;
-import com.junhong.liang.todo.api.TodoServiceInMemoryImpl;
-import com.junhong.liang.todo.api.TodoServiceMongoImpl;
+import com.junhong.liang.todo.api.*;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -21,7 +18,7 @@ import java.util.*;
 @RunWith(Parameterized.class)
 public class TodoResourceEndpointTest {
 
-    TodoService service;
+    private TodoService service;
 
     @Rule
     public ResourceTestRule resources;
@@ -66,7 +63,7 @@ public class TodoResourceEndpointTest {
 
         Todo r = getSingleTodo(createdTodo.getId());
 
-        assertTodoEqual(r, createdTodo);
+        assertEquals(r, createdTodo);
     }
 
     @Test
@@ -97,7 +94,7 @@ public class TodoResourceEndpointTest {
 
         // Verify
         for (String k : resultMap.keySet()) {
-            assertTodoEqual(expectedMap.get(k), resultMap.get(k));
+            assertEquals(expectedMap.get(k), resultMap.get(k));
         }
     }
 
@@ -137,7 +134,7 @@ public class TodoResourceEndpointTest {
         resources.target("/todos/" + todoId).request().put(Entity.json(newTodo));
 
         Todo r = getSingleTodo(todoId);
-        assertTodoEqual(newTodo, r, false);
+        assertEquals(newTodo, r);
     }
 
     @Test
@@ -153,19 +150,6 @@ public class TodoResourceEndpointTest {
         assertEquals(422, statusCode);
     }
 
-
-    // Helper method to test equalness of to-do item
-    private void assertTodoEqual(Todo expected, Todo actual) {
-        assertTodoEqual(expected, actual, true);
-    }
-
-    private void assertTodoEqual(Todo expected, Todo actual, boolean compareId) {
-        if (compareId) assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getDescription(), actual.getDescription());
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getTasks().size(), actual.getTasks().size());
-        // TODO: compare tasks in the list are the same
-    }
 
     private Todo addTodo(Todo todo) {
         return resources.target("/todos")
