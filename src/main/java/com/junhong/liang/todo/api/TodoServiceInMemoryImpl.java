@@ -32,7 +32,7 @@ public class TodoServiceInMemoryImpl implements TodoService {
 
     @Override
     public Todo addTodo(Todo todo) {
-        if (!Todo.isValid(todo,false)) {
+        if (!Todo.isValid(todo)) {
             throw new TodoException(TodoException.TODO_MALFORMED, "Todo is malformed.");
         }
         String newId = UUID.randomUUID().toString();
@@ -43,7 +43,7 @@ public class TodoServiceInMemoryImpl implements TodoService {
 
     @Override
     public Todo updateTodo(String id, Todo todo) {
-        if (!Todo.isValid(todo,true)) {
+        if (!Todo.isValid(todo)) {
             throw new TodoException(TodoException.TODO_MALFORMED, "Todo is malformed.");
         }
         Todo newTodo = new Todo(id, todo.getName(), todo.getDescription(), todo.getTasks());

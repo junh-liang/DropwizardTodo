@@ -52,11 +52,7 @@ public class Todo {
         return tasks;
     }
 
-    public static boolean isValid(Todo td, boolean hasId) {
-        if ((hasId && td.getId() == null) ||
-                td.getDescription() == null ||
-                td.getTasks() == null) return false;
-
+    public static boolean isValid(Todo td) {
         // Validate Task in tasks, assume tasks can't have same ID
         Set<String> set = new HashSet<>();
         for(Task t : td.getTasks()) {
