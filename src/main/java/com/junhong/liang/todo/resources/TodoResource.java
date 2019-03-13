@@ -52,7 +52,6 @@ public class TodoResource {
     @Timed
     public void deleteTodoById(@PathParam("id") String id) {
         todoService.deleteTodo(id);
-        return;
     }
 
 }

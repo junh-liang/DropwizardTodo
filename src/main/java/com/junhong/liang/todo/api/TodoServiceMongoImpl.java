@@ -22,7 +22,7 @@ public class TodoServiceMongoImpl implements TodoService {
             mongoTodo = collection.findOneById(id);
         } catch (IllegalArgumentException e) {
             // This is necessary because if the user put in a invalid ObjectID, mongo will throw IllegalArgumentException
-            throw new TodoException(TodoException.RESOURCE_NOT_FOUND, "Todo with ID " + id + " not found.");
+            mongoTodo = null;
         }
 
         if(mongoTodo == null) {
@@ -87,7 +87,6 @@ public class TodoServiceMongoImpl implements TodoService {
         }
 
         MongoTodo(Todo todo) {
-            this.id = todo.getId();
             this.name = todo.getName();
             this.description = todo.getDescription();
             this.tasks = todo.getTasks();
